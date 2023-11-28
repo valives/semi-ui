@@ -88,9 +88,10 @@ PURE_WHITE_MARGIN_PROCESSOR = PureWhiteMarginProcessor(config)
 """
 以下是菜单的组织
 """
+
+
 # 创建主菜单
 root_menu = Menu('【Semi-Utils】\n    当前设置')
-
 # 创建子菜单：布局
 layout_menu = SubMenu('布局')
 layout_menu.set_value_getter(config, lambda x: x['layout']['type'])

@@ -86,6 +86,18 @@ class Menu(MenuComponent):
         for idx, component in enumerate(self.components):
             print('【{}】: {}'.format(idx + 1, component.get_active_item()))
 
+    def direct_display(self):
+        """
+        直接返回所有项目
+        :return:
+        """
+        text = ''
+        items = []
+        for idx, component in enumerate(self.components):
+            text += '【{}】 {}'.format(idx + 1, component.get_active_item()) + '\n'
+            items.append(component.get_active_item())
+        return items
+
 
 class SubMenu(MenuComponent):
     def __init__(self, name):
