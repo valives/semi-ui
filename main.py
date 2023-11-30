@@ -155,7 +155,6 @@ def btn_set_menu(menu, i):
 
 if __name__ == '__main__':
     # 创建图形化界面
-    root = Tk()
     tk = TkCreate(root_menu, current_menu, '水印工具', state, btn_processing)
     tk.create()
     # tk.ttk_create()

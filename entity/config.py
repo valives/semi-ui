@@ -9,8 +9,9 @@ from enums.constant import LOCATION_LEFT_BOTTOM
 from enums.constant import LOCATION_LEFT_TOP
 from enums.constant import LOCATION_RIGHT_BOTTOM
 from enums.constant import LOCATION_RIGHT_TOP
-
-
+from tkGUI.tk import root
+from tkinter import *
+from tkinter import simpledialog
 class ElementConfig(object):
     """
     布局中元素的配置对象
@@ -74,7 +75,7 @@ class Config(object):
     def set(self, key, value):
         self._data[key] = value
 
-    def load_logo(self, make) -> Image.Image:
+    def load_logo(self, make) -> Image:
         """
         根据厂商获取 logo
         :param make: 厂商
@@ -247,7 +248,8 @@ class Config(object):
 
     def set_custom(self, location):
         self._data['layout']['elements'][location]['name'] = 'Custom'
-        user_input = input('输入自定义字段的值（上次使用的值为：{}）\n'.format(self.get_custom_value(location)))
+        user_input = simpledialog.askstring("输入自定义字段的值", '（上次使用的值为：{}）\n'.format(self.get_custom_value(location)), parent=root)
+        # user_input = input('输入自定义字段的值（上次使用的值为：{}）\n'.format(self.get_custom_value(location)))
         self._data['layout']['elements'][location]['value'] = user_input
 
     def set_element_name(self, location, name):

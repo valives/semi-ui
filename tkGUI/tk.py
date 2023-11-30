@@ -4,7 +4,8 @@ import time
 import threading
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
-import yaml
+
+root = Tk()
 
 
 class TkCreate(object):
@@ -13,9 +14,6 @@ class TkCreate(object):
     """
 
     def __init__(self, root_menu, menu, title, state, processing):
-        self._path = 'config.yaml'
-        with open(self._path, 'r', encoding='utf-8') as f:
-            self._data = yaml.safe_load(f)
         self.processing_thread = None
         self.root_menu = root_menu
         self.menu = menu
@@ -29,7 +27,7 @@ class TkCreate(object):
         self.lf = None
 
     def create(self):
-        self.root = Tk()
+        self.root = root
         self.root.title(self.title)
         sw = self.root.winfo_screenwidth()
         sh = self.root.winfo_screenheight()
