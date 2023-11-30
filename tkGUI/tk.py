@@ -2,13 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import threading
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 
 class TkCreate(object):
     """
     图形化界面的面板
     """
+
     def __init__(self, root_menu, menu, title, state, processing):
+        self.lf = None
         self.processing_thread = None
         self.root_menu = root_menu
         self.menu = menu
@@ -18,6 +22,7 @@ class TkCreate(object):
         self.root = None
         self.create_btn = None
         self._processing = processing
+        self.f = None
 
     def create(self):
         self.root = Tk()
@@ -33,37 +38,80 @@ class TkCreate(object):
         self.root.geometry('%dx%d+%d+%d' % (width, height, cen_x, cen_y))
         self.root.resizable(False, False)  # 将窗口设置为不可改变大小
         self.items = self.menu.direct_display()
-        self.create_label_buttons(self.root)
         self.create_bottom(self.root)
+        self.create_label_buttons(self.root)
         self.root.mainloop()
 
-    def create_label_buttons(self, root):
-        # 创建左侧标签
-        labels = [Label(root, text=f"{i}", font=('Times', 16), justify='center', relief=RIDGE, anchor='w') for i in
+    def ttk_create(self):
+        self.root = ttk.Window(title="窗口名字",  # 设置窗口的标题
+                               themename="litera",  # 设置主题
+                               size=(1240, 800),  # 窗口的大小
+                               position=(0, 0),  # 窗口所在的位置
+                               minsize=(0, 0),  # 窗口的最小宽高
+                               maxsize=(1920, 1080),  # 窗口的最大宽高
+                               resizable=None,  # 设置窗口是否可以更改大小
+                               alpha=1.0, )
+        self.f = ttk.Labelframe(width=1240, height=600)
+        self.f.pack()
+        # self.lf = ttk.Frame(width=300, height=80)
+        # self.lf.pack()
+        self.items = self.menu.direct_display()
+        self.ttk_create_label_buttons(self.f)
+        self.ttk_create_bottom(self.root)
+        self.root.mainloop()
+
+    def ttk_create_label_buttons(self, root):
+        labels = [Label(root, text=f"{i}", font=('Times', 14), justify='center', relief=RIDGE, anchor='w', width=20) for
+                  i in
                   self.items]
         for i, label in enumerate(labels):
             label.grid(row=i, column=0, sticky="nsew", padx=5, pady=1)
         # 创建右侧按钮
-        buttons = [Button(root, text=f"子菜单", font=('Times', 16), justify='center', relief=RIDGE, anchor='w',
+        buttons = [Button(root, text=f"子菜单", font=('Times', 14), justify='center', relief=RIDGE, anchor='w',
                           command=lambda index=i: self.run(index)) for i, label in
                    enumerate(self.items)]
         for i, button in enumerate(buttons):
             button.grid(row=i, column=1, sticky="nsew", padx=5, pady=1)
 
-    def run(self, i):
-        self.menu = self.menu.components[int(i)]
-        # if self.menu.is_leaf():
-        #     self.menu.run()
-        #     current_menu = self.root_menu
+    def create_label_buttons(self, root, is_root=0):
+        title = "子菜单"
+        if is_root:
+            title = '选择'
+        # 创建左侧标签
+        labels = [Label(root, text=f"{i}", font=('Times', 16), justify='center', relief=RIDGE, anchor='w') for i in
+                  self.items]
+        for i, label in enumerate(labels):
+            label.grid(row=i+1, column=0, sticky="nsew", padx=5, pady=1)
+        # 创建右侧按钮
 
-    def modify(self, new_value):
-        self.menu = new_value
+        buttons = [Button(root, text=f"{title}", font=('Times', 16), justify='center', relief=RIDGE, anchor='w',
+                          command=lambda index=i: self.run(index)) for i, label in
+                   enumerate(self.items)]
+
+        for i, button in enumerate(buttons):
+            button.grid(row=i+1, column=1, sticky="nsew", padx=5, pady=1)
+
+    def run(self, i):
+        is_root = 1
+        self.clear_all()  # 清除所有按钮
+        self.menu = self.menu.components[int(i)]
+        if self.menu.is_leaf():
+            print( self.menu )
+            self.menu.run()
+            self.menu = self.root_menu
+            is_root = 0
         self.items = self.menu.direct_display()
+        self.create_label_buttons(self.root, is_root)
+
+    def ttk_create_bottom(self, root):
+        self.create_btn = ttk.Button(root, text="按当前配置生成", bootstyle=SUCCESS,
+                                     command=lambda: self.thread_it(self.new_processing))
+        self.create_btn.grid()
 
     def create_bottom(self, root):
-        self.create_btn = Button(root, text=f"按当前配置生成", font=('Times', 16), justify='center', relief=RAISED,
+        self.create_btn = Button(root, text="按当前配置生成", font=('Times', 16), justify='center', relief=RAISED,
                                  anchor='w', command=lambda: self.thread_it(self.new_processing))
-        self.create_btn.grid()
+        self.create_btn.grid(row=0, column=0, padx=10, pady=10)
 
     def thread_it(self, func):  # 可以让按键弹起
         self.create_btn.config(state="disabled", text='Loading......')
@@ -79,7 +127,10 @@ class TkCreate(object):
         self.create_btn.config(state="normal", text='按当前配置生成')
         messagebox.showinfo("提示", "处理完成，文件已输出至 output 文件夹中")
 
-
+    def clear_all(self):
+        for key in self.root.winfo_children():
+            if key.cget("text") != "按当前配置生成":  # 确保按钮是Button类实例且文本不是"按当前配置生成"
+                key.destroy()  # 销毁所有标签和按钮
 
 
 # 添加按钮防抖

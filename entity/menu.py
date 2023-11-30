@@ -44,6 +44,13 @@ class MenuComponent:
         """
         raise NotImplementedError
 
+    def direct_display(self):
+        """
+        打印菜单
+        :return:
+        """
+        raise NotImplementedError
+
     def display_item(self):
         """
         打印菜单条目
@@ -176,6 +183,18 @@ class SubMenu(MenuComponent):
         print('-' * 10)
         for idx, component in enumerate(self.components):
             print('【{}】: {}'.format(idx + 1, ': '.join([self.name, component.get_active_item()])))
+
+    def direct_display(self):
+        """
+        直接返回所有项目
+        :return:
+        """
+        text = ''
+        items = []
+        for idx, component in enumerate(self.components):
+            text += '【{}】 {}'.format(idx + 1, component.get_active_item()) + '\n'
+            items.append(component.get_active_item())
+        return items
 
 
 class MenuItem(MenuComponent):

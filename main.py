@@ -157,6 +157,7 @@ if __name__ == '__main__':
     # 创建图形化界面
     tk = TkCreate(root_menu, current_menu, '水印工具', state, btn_processing)
     tk.create()
+    # tk.ttk_create()
     #     print(SEPARATE_LINE)
     #     print('''
     # 本工具为开源工具，遵循 Apache 2.0 License 发布。如果您在使用过程中遇到问题，请联系作者：
