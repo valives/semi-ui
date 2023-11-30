@@ -95,12 +95,12 @@ class TkCreate(object):
 
     def run(self, i):
         is_root = 1
-        self.clear_all()  # 清除所有按钮
         self.menu = self.menu.components[int(i)]
         if self.menu.is_leaf():
             self.menu.run()
             self.menu = self.root_menu
             is_root = 0
+        self.clear_all()  # 清除所有按钮
         self.items = self.menu.direct_display()
         self.create_label_buttons(self.root, is_root)
 
@@ -134,19 +134,4 @@ class TkCreate(object):
                 key.destroy()  # 销毁所有标签和按钮
 
 
-# 添加按钮防抖
-class DebouncedButton:
-    def __init__(self, button, debounce_time=1.0):
-        self.button = button
-        self.debounce_time = debounce_time
-        self.last_click_time = 0
-        self.button.bind("<Button-1>", self.on_click)
 
-    def on_click(self, event):
-        current_time = time.time()
-        if current_time - self.last_click_time < self.debounce_time:
-            # 防抖处理：如果点击间隔太短，忽略此次点击
-            return
-        self.last_click_time = current_time
-        # 执行你的逻辑代码
-        print("Button clicked!")
