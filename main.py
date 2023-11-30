@@ -18,6 +18,7 @@ from init import root_menu
 from utils import ENCODING
 from utils import get_file_list
 from tkGUI.tk import TkCreate
+from tkinter import *
 
 
 def processing():
@@ -150,11 +151,11 @@ def btn_set_menu(menu, i):
     if current_menu.is_leaf():
         current_menu.run()
         current_menu = root_menu
-        tk.modify(current_menu)
 
 
 if __name__ == '__main__':
     # 创建图形化界面
+    root = Tk()
     tk = TkCreate(root_menu, current_menu, '水印工具', state, btn_processing)
     tk.create()
     # tk.ttk_create()

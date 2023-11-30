@@ -4,6 +4,7 @@ import time
 import threading
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+import yaml
 
 
 class TkCreate(object):
@@ -12,7 +13,9 @@ class TkCreate(object):
     """
 
     def __init__(self, root_menu, menu, title, state, processing):
-        self.lf = None
+        self._path = 'config.yaml'
+        with open(self._path, 'r', encoding='utf-8') as f:
+            self._data = yaml.safe_load(f)
         self.processing_thread = None
         self.root_menu = root_menu
         self.menu = menu
@@ -23,6 +26,7 @@ class TkCreate(object):
         self.create_btn = None
         self._processing = processing
         self.f = None
+        self.lf = None
 
     def create(self):
         self.root = Tk()
@@ -96,7 +100,6 @@ class TkCreate(object):
         self.clear_all()  # 清除所有按钮
         self.menu = self.menu.components[int(i)]
         if self.menu.is_leaf():
-            print( self.menu )
             self.menu.run()
             self.menu = self.root_menu
             is_root = 0
